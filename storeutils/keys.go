@@ -1,4 +1,4 @@
-package store
+package storeutils
 
 import (
 	"bytes"
@@ -30,13 +30,6 @@ func PrefixKeyBytes(subkeys ...[]byte) []byte {
 	}
 
 	return buf.Bytes()
-}
-
-func IntSubkey(subkey int) []byte {
-	if subkey < 0 {
-		panic("cannot use negative numbers in subkeys")
-	}
-	return Uint64Subkey(uint64(subkey))
 }
 
 func Int64Subkey(subkey int64) []byte {

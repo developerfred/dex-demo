@@ -2,8 +2,8 @@ package market
 
 import (
 	"fmt"
-
-	"github.com/tendermint/dex-demo/types/store"
+	"github.com/tendermint/dex-demo/storeutils"
+	"github.com/tendermint/dex-demo/types/errs"
 	"github.com/tendermint/dex-demo/x/asset"
 	"github.com/tendermint/dex-demo/x/market/types"
 
@@ -32,14 +32,14 @@ func NewKeeper(sk sdk.StoreKey, ak asset.Keeper, cdc *codec.Codec) Keeper {
 	}
 }
 
-func (k Keeper) Create(ctx sdk.Context, baseAsset store.EntityID, quoteAsset store.EntityID) types.Market {
-	id := store.IncrementSeq(ctx, k.storeKey, []byte(seqKey))
+func (k Keeper) Create(ctx sdk.Context, baseAsset storeutils.EntityID, quoteAsset storeutils.EntityID) types.Market {
+	id := storeutils.IncrementSeq(ctx, k.storeKey, []byte(seqKey))
 	market := types.Market{
 		ID:           id,
 		BaseAssetID:  baseAsset,
 		QuoteAssetID: quoteAsset,
 	}
-	err := store.SetNotExists(ctx, k.storeKey, k.cdc, marketKey(id), market)
+	err := storeutils.SetNotExists(ctx, k.storeKey, k.cdc, marketKey(id), market)
 	// should never happen, implies consensus
 	// or storage bug
 	if err != nil {
@@ -49,25 +49,25 @@ func (k Keeper) Create(ctx sdk.Context, baseAsset store.EntityID, quoteAsset sto
 }
 
 func (k Keeper) Inject(ctx sdk.Context, market types.Market) {
-	seq := store.GetSeq(ctx, k.storeKey, []byte(seqKey))
+	seq := storeutils.GetSeq(ctx, k.storeKey, []byte(seqKey))
 
 	if !market.ID.Dec().Equals(seq) {
 		panic("Invalid asset ID.")
 	}
 
-	store.IncrementSeq(ctx, k.storeKey, []byte(seqKey))
-	if err := store.SetNotExists(ctx, k.storeKey, k.cdc, marketKey(market.ID), market); err != nil {
+	storeutils.IncrementSeq(ctx, k.storeKey, []byte(seqKey))
+	if err := storeutils.SetNotExists(ctx, k.storeKey, k.cdc, marketKey(market.ID), market); err != nil {
 		panic(err)
 	}
 }
 
-func (k Keeper) Get(ctx sdk.Context, id store.EntityID) (types.Market, sdk.Error) {
+func (k Keeper) Get(ctx sdk.Context, id storeutils.EntityID) (types.Market, sdk.Error) {
 	var m types.Market
-	err := store.Get(ctx, k.storeKey, k.cdc, marketKey(id), &m)
+	err := errs.WrapNotFound(storeutils.Get(ctx, k.storeKey, k.cdc, marketKey(id), &m))
 	return m, err
 }
 
-func (k Keeper) Pair(ctx sdk.Context, id store.EntityID) (string, sdk.Error) {
+func (k Keeper) Pair(ctx sdk.Context, id storeutils.EntityID) (string, sdk.Error) {
 	mkt, err := k.Get(ctx, id)
 	if err != nil {
 		return "", err
@@ -84,8 +84,8 @@ func (k Keeper) Pair(ctx sdk.Context, id store.EntityID) (string, sdk.Error) {
 	return fmt.Sprintf("%s/%s", base.Symbol, quote.Symbol), nil
 }
 
-func (k Keeper) Has(ctx sdk.Context, id store.EntityID) bool {
-	return store.Has(ctx, k.storeKey, marketKey(id))
+func (k Keeper) Has(ctx sdk.Context, id storeutils.EntityID) bool {
+	return storeutils.Has(ctx, k.storeKey, marketKey(id))
 }
 
 func (k Keeper) Iterator(ctx sdk.Context, cb IteratorCB) {
@@ -104,8 +104,8 @@ func (k Keeper) Iterator(ctx sdk.Context, cb IteratorCB) {
 	}
 }
 
-func marketKey(id store.EntityID) []byte {
-	return store.PrefixKeyString(valKey, id.Bytes())
+func marketKey(id storeutils.EntityID) []byte {
+	return storeutils.PrefixKeyString(valKey, id.Bytes())
 }
 
 func NewHandler(k Keeper) sdk.Handler {

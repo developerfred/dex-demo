@@ -1,14 +1,13 @@
 package book
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	abci "github.com/tendermint/tendermint/abci/types"
-
-	"github.com/tendermint/dex-demo/embedded/order"
-	"github.com/tendermint/dex-demo/types/errs"
-	"github.com/tendermint/dex-demo/types/store"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tendermint/dex-demo/embedded/order"
+	"github.com/tendermint/dex-demo/types/errs"
 )
 
 const (
@@ -31,7 +30,7 @@ func queryGet(path []string, keeper order.Keeper) ([]byte, sdk.Error) {
 		return nil, errs.ErrInvalidArgument("must specify a market ID")
 	}
 
-	mktId := store.NewEntityIDFromString(path[0])
+	mktId := storeutils.NewEntityIDFromString(path[0])
 	res := keeper.OpenOrdersByMarket(mktId)
 	b, err := codec.MarshalJSONIndent(codec.New(), res)
 	if err != nil {

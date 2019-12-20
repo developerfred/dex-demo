@@ -1,19 +1,18 @@
 package order
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	dbm "github.com/tendermint/tm-db"
 
+	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tendermint/dex-demo/pkg/matcheng"
 	"github.com/tendermint/dex-demo/testutil/testflags"
 	"github.com/tendermint/dex-demo/types"
-	"github.com/tendermint/dex-demo/types/store"
-
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestKeeper(t *testing.T) {
@@ -23,9 +22,9 @@ func TestKeeper(t *testing.T) {
 	k := NewKeeper(db, cdc)
 	creationEvs := []types.OrderCreated{
 		{
-			ID:                store.NewEntityID(1),
+			ID:                storeutils.NewEntityID(1),
 			Owner:             sdk.AccAddress{},
-			MarketID:          store.NewEntityID(1),
+			MarketID:          storeutils.NewEntityID(1),
 			Direction:         matcheng.Bid,
 			Price:             sdk.NewUint(100),
 			Quantity:          sdk.NewUint(100),
@@ -33,9 +32,9 @@ func TestKeeper(t *testing.T) {
 			CreatedBlock:      10,
 		},
 		{
-			ID:                store.NewEntityID(2),
+			ID:                storeutils.NewEntityID(2),
 			Owner:             sdk.AccAddress{},
-			MarketID:          store.NewEntityID(1),
+			MarketID:          storeutils.NewEntityID(1),
 			Direction:         matcheng.Ask,
 			Price:             sdk.NewUint(110),
 			Quantity:          sdk.NewUint(110),
@@ -43,9 +42,9 @@ func TestKeeper(t *testing.T) {
 			CreatedBlock:      11,
 		},
 		{
-			ID:                store.NewEntityID(3),
+			ID:                storeutils.NewEntityID(3),
 			Owner:             sdk.AccAddress{},
-			MarketID:          store.NewEntityID(2),
+			MarketID:          storeutils.NewEntityID(2),
 			Direction:         matcheng.Bid,
 			Price:             sdk.NewUint(99),
 			Quantity:          sdk.NewUint(99),
@@ -53,9 +52,9 @@ func TestKeeper(t *testing.T) {
 			CreatedBlock:      12,
 		},
 		{
-			ID:                store.NewEntityID(4),
+			ID:                storeutils.NewEntityID(4),
 			Owner:             sdk.AccAddress{},
-			MarketID:          store.NewEntityID(1),
+			MarketID:          storeutils.NewEntityID(1),
 			Direction:         matcheng.Bid,
 			Price:             sdk.NewUint(100),
 			Quantity:          sdk.NewUint(100),
@@ -63,9 +62,9 @@ func TestKeeper(t *testing.T) {
 			CreatedBlock:      10,
 		},
 		{
-			ID:                store.NewEntityID(5),
+			ID:                storeutils.NewEntityID(5),
 			Owner:             sdk.AccAddress{},
-			MarketID:          store.NewEntityID(1),
+			MarketID:          storeutils.NewEntityID(1),
 			Direction:         matcheng.Bid,
 			Price:             sdk.NewUint(100),
 			Quantity:          sdk.NewUint(100),
@@ -73,9 +72,9 @@ func TestKeeper(t *testing.T) {
 			CreatedBlock:      10,
 		},
 		{
-			ID:                store.NewEntityID(6),
+			ID:                storeutils.NewEntityID(6),
 			Owner:             sdk.AccAddress{},
-			MarketID:          store.NewEntityID(2),
+			MarketID:          storeutils.NewEntityID(2),
 			Direction:         matcheng.Bid,
 			Price:             sdk.NewUint(100),
 			Quantity:          sdk.NewUint(100),
@@ -85,16 +84,16 @@ func TestKeeper(t *testing.T) {
 	}
 	cancellationEvs := []types.OrderCancelled{
 		{
-			OrderID: store.NewEntityID(4),
+			OrderID: storeutils.NewEntityID(4),
 		},
 	}
 	fillEvs := []types.Fill{
 		{
-			OrderID:   store.NewEntityID(5),
+			OrderID:   storeutils.NewEntityID(5),
 			QtyFilled: sdk.NewUint(99),
 		},
 		{
-			OrderID:   store.NewEntityID(6),
+			OrderID:   storeutils.NewEntityID(6),
 			QtyFilled: sdk.NewUint(100),
 		},
 	}
@@ -109,7 +108,7 @@ func TestKeeper(t *testing.T) {
 	}
 
 	t.Run("open orders by market returns only open orders from the market", func(t *testing.T) {
-		res := k.OpenOrdersByMarket(store.NewEntityID(1))
+		res := k.OpenOrdersByMarket(storeutils.NewEntityID(1))
 		assert.Equal(t, 3, len(res))
 		ev0 := creationEvs[0]
 		ev1 := creationEvs[1]

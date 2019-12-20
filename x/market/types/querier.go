@@ -2,16 +2,15 @@ package types
 
 import (
 	"bytes"
+	"github.com/tendermint/dex-demo/storeutils"
 
 	"github.com/olekukonko/tablewriter"
-
-	"github.com/tendermint/dex-demo/types/store"
 )
 
 type NamedMarket struct {
-	ID           store.EntityID
-	BaseAssetID  store.EntityID
-	QuoteAssetID store.EntityID
+	ID           storeutils.EntityID
+	BaseAssetID  storeutils.EntityID
+	QuoteAssetID storeutils.EntityID
 	Name         string
 }
 

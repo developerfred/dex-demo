@@ -1,12 +1,12 @@
 package execution
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	"time"
 
 	"github.com/tendermint/dex-demo/pkg/log"
 	"github.com/tendermint/dex-demo/pkg/matcheng"
 	"github.com/tendermint/dex-demo/types"
-	"github.com/tendermint/dex-demo/types/store"
 	assettypes "github.com/tendermint/dex-demo/x/asset/types"
 	"github.com/tendermint/dex-demo/x/market"
 	"github.com/tendermint/dex-demo/x/order"
@@ -27,7 +27,7 @@ type Keeper struct {
 
 type matcherByMarket struct {
 	matcher *matcheng.Matcher
-	mktID   store.EntityID
+	mktID   storeutils.EntityID
 }
 
 var logger = log.WithModule("execution")
@@ -46,7 +46,7 @@ func (k Keeper) ExecuteAndCancelExpired(ctx sdk.Context) sdk.Error {
 	start := time.Now()
 	height := ctx.BlockHeight()
 
-	var toCancel []store.EntityID
+	var toCancel []storeutils.EntityID
 	k.ordK.Iterator(ctx, func(ord types2.Order) bool {
 		if height-ord.CreatedBlock > int64(ord.TimeInForceBlocks) {
 			toCancel = append(toCancel, ord.ID)

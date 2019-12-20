@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/tendermint/dex-demo/types/store"
+	"github.com/tendermint/dex-demo/storeutils"
 )
 
 const (
@@ -11,12 +11,12 @@ const (
 )
 
 type Market struct {
-	ID           store.EntityID
-	BaseAssetID  store.EntityID
-	QuoteAssetID store.EntityID
+	ID           storeutils.EntityID
+	BaseAssetID  storeutils.EntityID
+	QuoteAssetID storeutils.EntityID
 }
 
-func New(id store.EntityID, baseAsset store.EntityID, quoteAsset store.EntityID) Market {
+func New(id storeutils.EntityID, baseAsset storeutils.EntityID, quoteAsset storeutils.EntityID) Market {
 	return Market{
 		ID:           id,
 		BaseAssetID:  baseAsset,

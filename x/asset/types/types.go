@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"github.com/tendermint/dex-demo/storeutils"
 	"strings"
 
 	"github.com/tendermint/dex-demo/types/store"
@@ -16,12 +17,12 @@ const (
 )
 
 type Asset struct {
-	ID                store.EntityID `json:"id"`
-	Name              string         `json:"name"`
-	Symbol            string         `json:"symbol"`
-	Owner             sdk.AccAddress `json:"owner"`
-	CirculatingSupply sdk.Uint       `json:"circulating_supply"`
-	TotalSupply       sdk.Uint       `json:"total_supply"`
+	ID                storeutils.EntityID `json:"id"`
+	Name              string              `json:"name"`
+	Symbol            string              `json:"symbol"`
+	Owner             sdk.AccAddress      `json:"owner"`
+	CirculatingSupply sdk.Uint            `json:"circulating_supply"`
+	TotalSupply       sdk.Uint            `json:"total_supply"`
 }
 
 func (a Asset) String() string {
@@ -33,7 +34,7 @@ Circulating Supply: %s,
 TotalSupply: %s"`, a.ID, a.Name, a.Symbol, a.Owner, a.CirculatingSupply, a.TotalSupply))
 }
 
-func New(id store.EntityID, name string, symbol string, owner sdk.AccAddress, circSup sdk.Uint, totalSup sdk.Uint) Asset {
+func New(id storeutils.EntityID, name string, symbol string, owner sdk.AccAddress, circSup sdk.Uint, totalSup sdk.Uint) Asset {
 	return Asset{
 		ID:                id,
 		Name:              name,
@@ -44,10 +45,10 @@ func New(id store.EntityID, name string, symbol string, owner sdk.AccAddress, ci
 	}
 }
 
-func Coin(id store.EntityID, quantity sdk.Uint) sdk.Coin {
+func Coin(id storeutils.EntityID, quantity sdk.Uint) sdk.Coin {
 	return store.FormatCoin(id, quantity)
 }
 
-func Coins(id store.EntityID, quantity sdk.Uint) sdk.Coins {
+func Coins(id storeutils.EntityID, quantity sdk.Uint) sdk.Coins {
 	return sdk.NewCoins(Coin(id, quantity))
 }

@@ -1,16 +1,15 @@
 package matcheng
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	"math/rand"
 	"testing"
-
-	"github.com/tendermint/dex-demo/types/store"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func BenchmarkMatching(b *testing.B) {
-	id := store.NewEntityID(0)
+	id := storeutils.NewEntityID(0)
 	matcher := GetMatcher()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -30,7 +29,7 @@ func BenchmarkMatching(b *testing.B) {
 }
 
 func BenchmarkQueueing(b *testing.B) {
-	id := store.NewEntityID(0)
+	id := storeutils.NewEntityID(0)
 	matcher := GetMatcher()
 
 	b.ResetTimer()

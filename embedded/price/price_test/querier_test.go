@@ -1,6 +1,7 @@
 package price_test
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	"testing"
 	"time"
 
@@ -12,14 +13,12 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	dbm "github.com/tendermint/tm-db"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tendermint/dex-demo/pkg/matcheng"
 	"github.com/tendermint/dex-demo/testutil"
 	"github.com/tendermint/dex-demo/testutil/mockapp"
 	"github.com/tendermint/dex-demo/testutil/testflags"
 	"github.com/tendermint/dex-demo/types"
-	"github.com/tendermint/dex-demo/types/store"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestQuerier_Candles(t *testing.T) {
@@ -27,11 +26,11 @@ func TestQuerier_Candles(t *testing.T) {
 	app := mockapp.New(t)
 	db := dbm.NewMemDB()
 	keeper := price.NewKeeper(db, app.Cdc)
-	mktID := store.NewEntityID(1)
+	mktID := storeutils.NewEntityID(1)
 
 	fills := []types.Fill{
 		{
-			store.NewEntityID(1),
+			storeutils.NewEntityID(1),
 			mktID,
 			testutil.RandAddr(),
 			"DEX/ETH",
@@ -43,7 +42,7 @@ func TestQuerier_Candles(t *testing.T) {
 			sdk.NewUint(100),
 		},
 		{
-			store.NewEntityID(1),
+			storeutils.NewEntityID(1),
 			mktID,
 			testutil.RandAddr(),
 			"DEX/ETH",
@@ -55,7 +54,7 @@ func TestQuerier_Candles(t *testing.T) {
 			sdk.NewUint(90),
 		},
 		{
-			store.NewEntityID(1),
+			storeutils.NewEntityID(1),
 			mktID,
 			testutil.RandAddr(),
 			"DEX/ETH",
@@ -67,7 +66,7 @@ func TestQuerier_Candles(t *testing.T) {
 			sdk.NewUint(120),
 		},
 		{
-			store.NewEntityID(1),
+			storeutils.NewEntityID(1),
 			mktID,
 			testutil.RandAddr(),
 			"DEX/ETH",

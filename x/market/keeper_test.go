@@ -1,6 +1,7 @@
 package market_test
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,7 +10,6 @@ import (
 	"github.com/tendermint/dex-demo/testutil"
 	"github.com/tendermint/dex-demo/testutil/mockapp"
 	"github.com/tendermint/dex-demo/testutil/testflags"
-	"github.com/tendermint/dex-demo/types/store"
 	"github.com/tendermint/dex-demo/x/market/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -24,7 +24,7 @@ func TestKeeper(t *testing.T) {
 	require.NoError(t, err)
 	mkt := app.MarketKeeper.Create(app.Ctx, asset1.ID, asset2.ID)
 	expMkt := types.Market{
-		ID:           store.NewEntityID(1),
+		ID:           storeutils.NewEntityID(1),
 		BaseAssetID:  asset1.ID,
 		QuoteAssetID: asset2.ID,
 	}

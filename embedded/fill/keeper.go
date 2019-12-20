@@ -1,6 +1,7 @@
 package fill
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	dbm "github.com/tendermint/tm-db"
 
 	"github.com/tendermint/dex-demo/types"
@@ -60,9 +61,9 @@ func (k Keeper) OnEvent(event interface{}) error {
 }
 
 func fillIterKey(blockNum int64) []byte {
-	return store.PrefixKeyBytes(store.Int64Subkey(blockNum))
+	return storeutils.PrefixKeyBytes(storeutils.Int64Subkey(blockNum))
 }
 
-func fillKey(blockNum int64, orderId store.EntityID) []byte {
-	return store.PrefixKeyBytes(fillIterKey(blockNum), orderId.Bytes())
+func fillKey(blockNum int64, orderId storeutils.EntityID) []byte {
+	return storeutils.PrefixKeyBytes(fillIterKey(blockNum), orderId.Bytes())
 }

@@ -1,18 +1,17 @@
 package matcheng
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	"sort"
 	"sync"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tendermint/dex-demo/pkg/conv"
 	"github.com/tendermint/dex-demo/pkg/log"
-	"github.com/tendermint/dex-demo/types/store"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 type Order struct {
-	ID       store.EntityID
+	ID       storeutils.EntityID
 	Price    sdk.Uint
 	Quantity sdk.Uint
 }
@@ -53,7 +52,7 @@ func NewMatcher() *Matcher {
 // degen case: vertical line (then choose midpoint)
 // other degen case: no overlap.
 
-func (m *Matcher) EnqueueOrder(oType Direction, id store.EntityID, price sdk.Uint, quantity sdk.Uint) {
+func (m *Matcher) EnqueueOrder(oType Direction, id storeutils.EntityID, price sdk.Uint, quantity sdk.Uint) {
 	m.mtx.Lock()
 	defer m.mtx.Unlock()
 

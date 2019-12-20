@@ -2,6 +2,7 @@ package cli
 
 import (
 	"errors"
+	"github.com/tendermint/dex-demo/storeutils"
 	"math"
 	"strconv"
 	"strings"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/tendermint/dex-demo/pkg/cliutil"
 	"github.com/tendermint/dex-demo/pkg/matcheng"
-	"github.com/tendermint/dex-demo/types/store"
 	"github.com/tendermint/dex-demo/x/order/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -28,7 +28,7 @@ func GetCmdPost(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			marketID := store.NewEntityIDFromString(args[0])
+			marketID := storeutils.NewEntityIDFromString(args[0])
 			var direction matcheng.Direction
 			dirArg := strings.ToLower(args[1])
 			if dirArg == "bid" {
@@ -72,7 +72,7 @@ func GetCmdCancel(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			orderID := store.NewEntityIDFromString(args[0])
+			orderID := storeutils.NewEntityIDFromString(args[0])
 			msg := types.NewMsgCancel(ctx.GetFromAddress(), orderID)
 			return cliutil.ValidateAndBroadcast(ctx, bldr, msg)
 		},

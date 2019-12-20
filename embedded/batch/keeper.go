@@ -1,6 +1,7 @@
 package batch
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	dbm "github.com/tendermint/tm-db"
 
 	"github.com/tendermint/dex-demo/types"
@@ -29,7 +30,7 @@ func NewKeeper(db dbm.DB, cdc *codec.Codec) Keeper {
 	}
 }
 
-func (k Keeper) LatestByMarket(marketID store.EntityID) (Batch, sdk.Error) {
+func (k Keeper) LatestByMarket(marketID storeutils.EntityID) (Batch, sdk.Error) {
 	var res Batch
 	var found bool
 	k.as.ReversePrefixIterator(batchIterKey(marketID), func(_ []byte, v []byte) bool {
@@ -66,10 +67,10 @@ func (k Keeper) OnEvent(event interface{}) error {
 	return nil
 }
 
-func batchKey(marketID store.EntityID, blkNum int64) []byte {
-	return store.PrefixKeyBytes(batchIterKey(marketID), store.Int64Subkey(blkNum))
+func batchKey(marketID storeutils.EntityID, blkNum int64) []byte {
+	return storeutils.PrefixKeyBytes(batchIterKey(marketID), storeutils.Int64Subkey(blkNum))
 }
 
-func batchIterKey(marketID store.EntityID) []byte {
-	return store.PrefixKeyString(batchKeyPrefix, marketID.Bytes())
+func batchIterKey(marketID storeutils.EntityID) []byte {
+	return storeutils.PrefixKeyString(batchKeyPrefix, marketID.Bytes())
 }

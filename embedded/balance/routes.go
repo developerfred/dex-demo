@@ -1,12 +1,11 @@
 package balance
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	"net/http"
 	"strings"
 
 	"github.com/gorilla/mux"
-
-	"github.com/tendermint/dex-demo/types/store"
 
 	"github.com/cosmos/cosmos-sdk/client/keys"
 
@@ -106,7 +105,7 @@ func faucetHandler(ctx context.CLIContext, cdc *codec.Codec) http.HandlerFunc {
 	}
 }
 
-func doTransfer(kb *auth.Keybase, ctx context.CLIContext, w http.ResponseWriter, cdc *codec.Codec, to sdk.AccAddress, amount sdk.Uint, assetID store.EntityID, passphrase string) {
+func doTransfer(kb *auth.Keybase, ctx context.CLIContext, w http.ResponseWriter, cdc *codec.Codec, to sdk.AccAddress, amount sdk.Uint, assetID storeutils.EntityID, passphrase string) {
 	owner := kb.GetAddr()
 	ctx = ctx.WithFromAddress(owner)
 	msg := types.NewMsgTransfer(assetID, owner, to, amount)

@@ -2,10 +2,10 @@ package market
 
 import (
 	"errors"
+	"github.com/tendermint/dex-demo/storeutils"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/tendermint/dex-demo/types/store"
 	"github.com/tendermint/dex-demo/x/market/types"
 )
 
@@ -18,7 +18,7 @@ func NewGenesisState(markets []types.Market) GenesisState {
 }
 
 func ValidateGenesis(data GenesisState) error {
-	currentId := store.ZeroEntityID
+	currentId := storeutils.ZeroEntityID
 	for _, market := range data.Markets {
 		currentId = currentId.Inc()
 		if !currentId.Equals(market.ID) {
@@ -39,9 +39,9 @@ func DefaultGenesisState() GenesisState {
 	return GenesisState{
 		Markets: []types.Market{
 			{
-				ID:           store.NewEntityID(1),
-				BaseAssetID:  store.NewEntityID(2),
-				QuoteAssetID: store.NewEntityID(1),
+				ID:           storeutils.NewEntityID(1),
+				BaseAssetID:  storeutils.NewEntityID(2),
+				QuoteAssetID: storeutils.NewEntityID(1),
 			},
 		},
 	}

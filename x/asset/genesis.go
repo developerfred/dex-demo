@@ -2,10 +2,10 @@ package asset
 
 import (
 	"errors"
+	"github.com/tendermint/dex-demo/storeutils"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/tendermint/dex-demo/types/store"
 	"github.com/tendermint/dex-demo/x/asset/types"
 )
 
@@ -18,7 +18,7 @@ func NewGenesisState(assets []types.Asset) GenesisState {
 }
 
 func ValidateGenesis(data GenesisState) error {
-	currentId := store.ZeroEntityID
+	currentId := storeutils.ZeroEntityID
 
 	for _, asset := range data.Assets {
 		currentId = currentId.Inc()
@@ -43,14 +43,14 @@ func DefaultGenesisState() GenesisState {
 	return GenesisState{
 		Assets: []types.Asset{
 			{
-				ID:                store.NewEntityID(1),
+				ID:                storeutils.NewEntityID(1),
 				Name:              "UEX Staking Token",
 				Symbol:            "UEX",
 				CirculatingSupply: sdk.NewUintFromString("40000000000000000000000000"),
 				TotalSupply:       sdk.NewUintFromString("1000000000000000000000000000"),
 			},
 			{
-				ID:                store.NewEntityID(2),
+				ID:                storeutils.NewEntityID(2),
 				Name:              "Test Token",
 				Symbol:            "TEST",
 				CirculatingSupply: sdk.NewUintFromString("40000000000000000000000000"),

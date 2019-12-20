@@ -1,13 +1,12 @@
 package order
 
 import (
+	"github.com/tendermint/dex-demo/storeutils"
 	abci "github.com/tendermint/tendermint/abci/types"
-
-	"github.com/tendermint/dex-demo/types/errs"
-	"github.com/tendermint/dex-demo/types/store"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tendermint/dex-demo/types/errs"
 )
 
 const (
@@ -33,7 +32,7 @@ func queryList(keeper Keeper, reqB []byte) ([]byte, sdk.Error) {
 	}
 
 	orders := make([]Order, 0)
-	var lastID store.EntityID
+	var lastID storeutils.EntityID
 	iterCB := func(order Order) bool {
 		orders = append(orders, order)
 		lastID = order.ID
@@ -41,10 +40,10 @@ func queryList(keeper Keeper, reqB []byte) ([]byte, sdk.Error) {
 	}
 
 	if req.Owner.Empty() {
-		if req.Start.IsDefined() {
-			keeper.ReverseIteratorFrom(req.Start, iterCB)
-		} else {
+		if req.Start.IsZero() {
 			keeper.ReverseIterator(iterCB)
+		} else {
+			keeper.ReverseIteratorFrom(req.Start, iterCB)
 		}
 	} else {
 		// TEMPORARY: can add support for richer querying with sqlite
@@ -52,7 +51,7 @@ func queryList(keeper Keeper, reqB []byte) ([]byte, sdk.Error) {
 	}
 
 	if len(orders) < 50 {
-		lastID = store.NewEntityID(0)
+		lastID = storeutils.NewEntityID(0)
 	}
 	res := ListQueryResult{
 		NextID: lastID.Dec(),

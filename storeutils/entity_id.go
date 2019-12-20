@@ -1,9 +1,7 @@
-package store
+package storeutils
 
 import (
 	"math/big"
-
-	"github.com/tendermint/dex-demo/pkg/conv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -31,7 +29,7 @@ func (id EntityID) String() string {
 
 func (id EntityID) Bytes() []byte {
 	var buf [32]byte
-	bn := conv.SDKUint2Big(sdk.Uint(id))
+	bn := sdkUint2Big(sdk.Uint(id))
 	b := bn.Bytes()
 	copy(buf[32-len(b):], b)
 	return buf[:]
@@ -42,7 +40,7 @@ func (id EntityID) Inc() EntityID {
 }
 
 func (id EntityID) Dec() EntityID {
-	if !id.IsDefined() {
+	if id.IsZero() {
 		return id
 	}
 
@@ -62,10 +60,6 @@ func (id EntityID) Cmp(b EntityID) int {
 	}
 
 	return 0
-}
-
-func (id EntityID) IsDefined() bool {
-	return !sdk.Uint(id).IsZero()
 }
 
 func (id EntityID) IsZero() bool {
@@ -97,4 +91,9 @@ func (id *EntityID) UnmarshalJSON(data []byte) error {
 
 func (id EntityID) MarshalJSON() ([]byte, error) {
 	return sdk.Uint(id).MarshalJSON()
+}
+
+func sdkUint2Big(in sdk.Uint) *big.Int {
+	out, _ := new(big.Int).SetString(in.String(), 10)
+	return out
 }

@@ -1,10 +1,9 @@
 package book
 
 import (
-	"github.com/tendermint/dex-demo/pkg/matcheng"
-	"github.com/tendermint/dex-demo/types/store"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tendermint/dex-demo/pkg/matcheng"
+	"github.com/tendermint/dex-demo/storeutils"
 )
 
 type Book struct {
@@ -18,8 +17,8 @@ type QueryResultEntry struct {
 }
 
 type QueryResult struct {
-	MarketID    store.EntityID     `json:"market_id"`
-	BlockNumber int64              `json:"block_number"`
-	Bids        []QueryResultEntry `json:"bids"`
-	Asks        []QueryResultEntry `json:"asks"`
+	MarketID    storeutils.EntityID `json:"market_id"`
+	BlockNumber int64               `json:"block_number"`
+	Bids        []QueryResultEntry  `json:"bids"`
+	Asks        []QueryResultEntry  `json:"asks"`
 }

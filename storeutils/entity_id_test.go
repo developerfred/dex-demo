@@ -1,4 +1,4 @@
-package store
+package storeutils
 
 import (
 	"encoding/hex"
@@ -19,9 +19,9 @@ func TestEntityID(t *testing.T) {
 		assert.EqualValues(t, NewEntityID(11), a.Inc())
 		assert.EqualValues(t, NewEntityID(10), a)
 	})
-	t.Run("should return IsDefined()", func(t *testing.T) {
-		assert.False(t, NewEntityID(0).IsDefined())
-		assert.True(t, NewEntityID(1).IsDefined())
+	t.Run("should return IsZero()", func(t *testing.T) {
+		assert.True(t, NewEntityID(0).IsZero())
+		assert.False(t, NewEntityID(1).IsZero())
 	})
 	t.Run("should define equality", func(t *testing.T) {
 		assert.True(t, NewEntityID(1).Equals(NewEntityID(1)))
